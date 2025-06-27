@@ -10,21 +10,17 @@ const library = {
   },
 
   findBookByTitle(title) {
-    return this.books.find((book) => book.title === title);
+    return this.books.find((book) => book.title === title) || `There's no book with this titel : ${title}`
   },
 
   removeBook(title) {
     const index = this.books.findIndex((book) => book.title === title);
 
-    if (index !== -1) {
-      this.books.splice(index, 1);
-    } else {
-      console.log("Book not found.");
-    }
+    index !== -1 ? this.books.splice(index, 1) : console.log("Removing failed : Book not found.");
   },
 };
 
-library.addBook({title : "Hello di", author: "George Orwell", year: 1949 });
+library.removeBook("Hello di");
 
 console.log(library.findBookByTitle("Hello di"));
-console.log(library.books)
+console.log(library.books);
