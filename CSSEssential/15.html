@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      #content {
+        background-color: rgb(255, 98, 66);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        height: 100px;
+        flex-direction: column;
+      }
+
+      #item {
+        display: flex;
+        gap: 20px;
+        list-style: none;
+      }
+
+      .content {
+        padding: 10px;
+      }
+
+      .project-item {
+        border: 1px solid rgb(194, 192, 192);
+        padding: 10px;
+        margin-bottom: 20px;
+      }
+
+      #project-image {
+        width: 100px;
+        height: 100px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+      }
+
+      #peoject-desc {
+        margin-bottom: 10px;
+      }
+
+      .project-item ul {
+        margin: 0;
+        margin-top: 10px;
+        padding-left: 20px;
+      }
+      .project-item li {
+        margin: 0;
+        padding: 0;
+      }
+
+      .contact-group {
+        display: flex;
+        flex-direction: column;
+        width: auto;
+        gap: 10px;
+      }
+      .contact-group textarea,
+      .contact-group button {
+        align-self: flex-start;
+        width: auto;
+      }
+
+      #contect-item,
+      h2 {
+        margin-bottom: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div id="content">
+        <h1 style="font-size: 25px; color: rgb(30, 10, 100)">
+          Welcome to My Portfolio
+        </h1>
+        <nav style="margin-top: 10px">
+          <ul id="item">
+            <li id="">About</li>
+            <li id="">Projects</li>
+            <li id="">Contacts</li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="content">
+      <h2>About Me</h2>
+      <p style="margin-top: 10px">
+        Hello I'm a web developer with a passion for creating frunctional and
+        beautiful web applications.
+      </p>
+
+      <img
+        src="https://i.pinimg.com/736x/d2/fa/bd/d2fabd554a3e746e1acd602382dd9c96.jpg"
+        style="width: 100px; height: 100px"
+      />
+
+      <h2 style="margin-top: 10px; margin-bottom: 10px">Projects</h2>
+
+      <div class="project-item">
+        <h3>Project One : Personal Blog</h3>
+        <img
+          id="project-image"
+          src="https://miro.medium.com/v2/resize:fit:1400/1*u4EBes6Muu2fy7iM8igMug.jpeg"
+        />
+        <p id="peoject-desc">
+          A personal blog where i write about web development, and technology
+        </p>
+        <a href="#">View project</a>
+        <ul>
+          <li>
+            Technolies used:
+            <ul>
+              <li>HTML</li>
+              <li>CSS</li>
+              <li>Javascript</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+
+      <div class="project-item">
+        <h3>Project Two : Ecommerce site</h3>
+        <img
+          id="project-image"
+          src="https://miro.medium.com/v2/resize:fit:1100/format:webp/1*cC8P9hJxcbcP9OrooHeylQ.png"
+        />
+        <p id="peoject-desc">
+          An ecommerce site built to simulate a real world shopping experience
+        </p>
+        <a href="#">View project</a>
+        <ul>
+          <li>
+            Technolies used:
+            <ul>
+              <li>HTML</li>
+              <li>CSS</li>
+              <li>Javascript</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+
+      <div class="contact-group">
+        <div id="contact-item">
+          <h2>Contact Me</h2>
+          <label id="contact-label" for="name">Full Name: </label>
+          <input type="text" />
+        </div>
+        <div id="contact-item">
+          <label for="email">Email: </label>
+          <input type="email" />
+        </div>
+
+        <label for="message">Message: </label>
+
+        <textarea style="height: 50px"></textarea>
+
+        <button>Submit</button>
+      </div>
+    </main>
+
+    <footer>
+      <div id="content">
+        <p>&copy; 2025 My Portfolio</p>
+        <p>Follow me on <a href="#">Twitter</a> | <a href="#">Github</a></p>
+      </div>
+    </footer>
+  </body>
+</html>
