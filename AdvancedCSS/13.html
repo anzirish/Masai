@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      ol li:hover {
+        color: aqua;
+      }
+
+      ol li:first-child {
+        font-weight: bold;
+      }
+
+      ol li:first-child + li {
+        background-color: red;
+      }
+
+      ol li:nth-child(3) ~ li {
+        font-style: italic;
+      }
+    </style>
+  </head>
+  <body>
+    <ol>
+      <li>Gandalf</li>
+      <li>Frodo Baggins</li>
+      <li>Aragorn (Strider)</li>
+      <li>Legolas</li>
+      <li>Sméagol</li>
+    </ol>
+  </body>
+</html>
