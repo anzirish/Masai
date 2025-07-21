@@ -1,0 +1,17 @@
+#container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  flex-direction: row; /*Makes childs arranged horizontally*/
+  /* flex-direction: column;  Makes childs arranged vertically */
+}
+
+.item {
+  height: 200px;
+  width: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(255, 0, 234);
+}

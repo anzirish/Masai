@@ -1,0 +1,37 @@
+body {
+  background-color: rgb(226, 229, 234);
+  padding: 5px;
+}
+
+#container {
+  width: 100%;
+  display: flex;
+  gap: 5px;
+}
+
+.card {
+  flex: 1;
+  padding: 10px;
+  background: white;
+  justify-content: space-around;
+}
+
+.box {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+}
+
+.row {
+  flex: 1;
+  display: flex;
+  justify-content: space-around;
+}
+
+img {
+  max-width: 100%;
+  width: 300px;
+  height: 200px;
+  max-height: 100%;
+  display: block;
+}
