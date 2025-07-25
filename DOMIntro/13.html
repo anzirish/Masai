@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <input id="color-input" type="text" placeholder="Enter color name" />
+    <input id="text-input" type="text" placeholder="Enter text content" />
+    <button id="change-color">Change background color</button>
+    <button id="change-text">Update text</button>
+    <div>Hello divvvv</div>
+  </body>
+</html>
+
+<script>
+  // validate input color
+  function isValidColorName(colorName) {
+    const s = new Option().style;
+    s.color = colorName;
+    return s.color !== "";
+  }
+
+  // Change color after click
+  document.querySelector("#change-color").addEventListener("click", () => {
+    let color = document.querySelector("#color-input").value;
+    if (isValidColorName(color)) {
+      document.querySelector("div").style.backgroundColor = color;
+    } else {
+      alert("Invalid color name");
+    }
+  });
+
+  // change text after click
+  document.querySelector("#change-text").addEventListener("click", () => {
+    let inputText = document.querySelector("#text-input").value;
+    if (inputText) {
+      document.querySelector("div").textContent = inputText;
+    } else {
+      alert("Please enter some text!");
+    }
+  });
+</script>
