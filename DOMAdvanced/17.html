@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      const grid = document.createElement("div");
+      grid.style.display = "grid";
+      grid.style.gap = '5px'
+      grid.style.gridTemplateColumns = `repeat(${5}, 1fr)`;
+
+      fetch("https://fakestoreapi.com/products")
+        .then((response) => response.json())
+        .then((data) => {
+          for (let product of data) {
+            let title = product.title;
+            let price = product.price;
+            let image = product.image;
+            console.log(title, price, image);
+
+            const container = document.createElement("div");
+            const titleEle = document.createElement("h2");
+            const priceEle = document.createElement("h3");
+            const imageEle = document.createElement("img");
+
+            imageEle.style.width = "100px";
+            imageEle.style.height = "100px";
+            container.style.display = "flex";
+            container.style.flexDirection = "column";
+            imageEle.style.alignContent = "center";
+            titleEle.textContent = title;
+            priceEle.textContent = price;
+            imageEle.src = image;
+
+            container.style.padding = "10px";
+            if (product.price > 50) {
+              container.style.border = "2px solid yellow";
+            } else {
+              container.style.border = "2px solid green";
+            }
+            container.appendChild(titleEle);
+            container.appendChild(priceEle);
+            container.appendChild(imageEle);
+            grid.appendChild(container);
+          }
+        });
+
+      document.body.appendChild(grid);
+    </script>
+  </body>
+</html>

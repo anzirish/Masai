@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      div {
+        padding: 20px;
+        margin: 10px;
+        border: 2px solid #333;
+        background-color: #f0f0f0;
+        cursor: pointer;
+      }
+      
+      #outer {
+        background-color: #ffcccc;
+      }
+      
+      #middle {
+        background-color: #ccffcc;
+      }
+      
+      #inner {
+        background-color: #ccccff;
+      }
+      
+      button {
+        padding: 10px 20px;
+        margin: 5px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      
+      button:hover {
+        background-color: #0056b3;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="outer">
+      Outer div
+      <button id="outer-button">Outer</button>
+      <div id="middle">
+        Middle div
+        <button id="middle-button">Middle</button>
+        <div id="inner">Inner div<button id="inner-button">Inner</button></div>
+      </div>
+    </div>
+    <script>
+      // Bubbling
+      document.getElementById("outer").addEventListener("click", (e) => {
+        alert(`${e.currentTarget.id} div is clicked`);
+      });
+      document.getElementById("middle").addEventListener("click", (e) => {
+        alert(`${e.currentTarget.id} div is clicked`);
+      });
+      document.getElementById("inner").addEventListener("click", (e) => {
+        alert(`${e.currentTarget.id} div is clicked`);
+      });
+
+      //capturing
+      document.getElementById("outer-button").addEventListener("click", (e) => {
+        alert(`${e.currentTarget.id} is clicked`);
+      });
+      document.getElementById("middle-button").addEventListener(
+        "click",
+        (e) => {
+          alert(`${e.currentTarget.id} is clicked`);
+        },
+        true
+      );
+      document.getElementById("inner-button").addEventListener(
+        "click",
+        (e) => {
+          alert(`${e.currentTarget.id} is clicked`);
+          e.stopPropagation();
+        },
+        true
+      );
+    </script>
+  </body>
+</html>
