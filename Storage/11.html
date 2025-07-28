@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .container {
+        display: flex;
+        flex-direction: row;
+        gap: 20px;
+        align-items: center;
+      }
+      .viewNotes {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <input type="text" placeholder="Enter note" id="input-note" />
+      <button class="save">Save</button>
+      <button class="loadNotes">Load Notes</button>
+      <button class="clearNotes">Clear Notes</button>
+    </div>
+
+    <div class="viewNotes"></div>
+
+    <script>
+      const notesDiv = document.querySelector(".viewNotes");
+      const loadNotes = document.querySelector(".loadNotes");
+      const removeTasks = document.querySelector(".clearNotes");
+
+      loadTaks();
+
+      loadNotes.addEventListener("click", () => {
+        loadTaks();
+      });
+
+      removeTasks.addEventListener("click", () => {
+        localStorage.clear();
+        loadTaks();
+      });
+
+      document.querySelector(".save").addEventListener("click", () => {
+        const text = document.getElementById("input-note").value;
+        if (!text) {
+          alert("No task to save");
+          return;
+        }
+        let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+        tasks.push(text);
+        document.getElementById("input-note").value = "";
+        localStorage.setItem("tasks", JSON.stringify(tasks));
+        loadTaks();
+      });
+
+      function loadTaks() {
+        notesDiv.innerHTML = "";
+        let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+
+        for (task of tasks) {
+          let taskHolder = document.createElement("p");
+          taskHolder.style.margin = "5px";
+          taskHolder.textContent = task;
+          notesDiv.appendChild(taskHolder);
+        }
+      }
+    </script>
+  </body>
+</html>

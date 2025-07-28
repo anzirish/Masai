@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .input-container {
+        display: flex;
+        gap: 20px;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .taskContainer {
+        display: flex;
+        gap: 20px;
+        flex-direction: column;
+      }
+      .borderX {
+        margin: 20px 0 0 0;
+        width: 50%;
+        padding: 5px;
+        border-radius: 3px;
+        border: 2px solid rgb(217, 222, 222);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="input-container borderX">
+      <input type="text " id="input-text" placeholder="Enter task" />
+      <button class="saveTask">Save Task</button>
+    </div>
+    <input
+      type="text"
+      id="search-input"
+      placeholder="Search task"
+      class="borderX"
+    />
+    <div class="taskContainer borderX"></div>
+    <script>
+      const saveBtn = document.querySelector(".saveTask");
+      const textInput = document.getElementById("input-text");
+      const searchInput = document.getElementById("search-input");
+      const taskContainer = document.querySelector(".taskContainer");
+
+      loadTasks();
+
+      searchInput.addEventListener("input", function (e) {
+        let input = e.target.value.trim();
+        if (input.length) {
+          filterTasks(e.target.value);
+        } else {
+          loadTasks();
+        }
+      });
+
+      saveBtn.addEventListener("click", () => {
+        const input = textInput.value.trim();
+        if (!input) {
+          alert("Task is empty");
+          return;
+        }
+
+        const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+        const task = {
+          id: Date.now(),
+          text: input,
+          status: false,
+        };
+        tasks.push(task);
+        localStorage.setItem("tasks", JSON.stringify(tasks));
+        loadTasks();
+      });
+
+      function filterTasks(str) {
+        const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+
+        let filteredTasks = tasks.filter((item) => item.text.includes(str));
+        taskContainer.innerHTML = "";
+        if (!filteredTasks.length) {
+          taskContainer.style.visibility = "hidden";
+          return;
+        }
+        taskContainer.style.visibility = "visible";
+        console.log(JSON.parse(localStorage.getItem("tasks")));
+        for (let task of filteredTasks) {
+          const div = document.createElement("div");
+          const p = document.createElement("p");
+          const label = document.createElement("label");
+          const checkbox = document.createElement("input");
+          const remove = document.createElement("button");
+
+          div.style.display = "flex";
+          div.style.alignItems = "center";
+          p.style.margin = "0px";
+          p.textContent = task.text;
+          p.style.marginRight = "100px";
+          checkbox.style.marginRight = "100px";
+          label.textContent = "Mark as completed: ";
+          checkbox.type = "checkbox";
+          remove.textContent = "Remove";
+          div.appendChild(p);
+          div.appendChild(label);
+          div.appendChild(checkbox);
+          div.appendChild(remove);
+          taskContainer.appendChild(div);
+
+          remove.addEventListener("click", () => {
+            let updatedTasks = filteredTasks.filter(
+              (item) => item.id != task.id
+            );
+            localStorage.setItem("tasks", JSON.stringify(updatedTasks));
+            taskContainer.removeChild(div);
+          });
+        }
+      }
+      
+      function loadTasks() {
+        const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+        if (!tasks.length) {
+          taskContainer.style.visibility = "hidden";
+          return;
+        }
+        taskContainer.style.visibility = "visible";
+        taskContainer.innerHTML = "";
+        console.log(JSON.parse(localStorage.getItem("tasks")));
+        for (let task of tasks) {
+          const div = document.createElement("div");
+          const p = document.createElement("p");
+          const label = document.createElement("label");
+          const checkbox = document.createElement("input");
+          const remove = document.createElement("button");
+
+          div.style.display = "flex";
+          div.style.alignItems = "center";
+          p.style.margin = "0px";
+          p.textContent = task.text;
+          p.style.marginRight = "100px";
+          checkbox.style.marginRight = "100px";
+          label.textContent = "Mark as completed: ";
+          checkbox.type = "checkbox";
+          remove.textContent = "Remove";
+
+          checkbox.checked = task.status;
+
+          div.appendChild(p);
+          div.appendChild(label);
+          div.appendChild(checkbox);
+          div.appendChild(remove);
+          taskContainer.appendChild(div);
+
+          remove.addEventListener("click", () => {
+            let updatedTasks = tasks.filter((item) => item.id != task.id);
+            localStorage.setItem("tasks", JSON.stringify(updatedTasks));
+            loadTasks()
+          });
+
+          checkbox.addEventListener("click", () => {
+            let targetTask = tasks.find((item) => item.id == task.id);
+            targetTask.status = !targetTask.status;
+            console.log(tasks);
+            localStorage.setItem("tasks", JSON.stringify(tasks));
+          });
+        }
+      }
+    </script>
+  </body>
+</html>

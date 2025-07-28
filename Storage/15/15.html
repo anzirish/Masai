@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="user-validation">
+      <input type="text" placeholder="Enter username" id="username-input" />
+      <button id="username-enter">Enter</button>
+      <button id="save-user" style="float: right">Save Current User</button>
+      <h4 id="updateInfo">Current status : None</h4>
+    </div>
+    <div>
+      <h3 id="username">Logged id : None</h3>
+
+      <div class="addItemContainer">
+        <label>Add items to cart: </label>
+        <input type="text" id="item-input" placeholder="Enter item name" />
+        <input type="number" id="price-input" placeholder="Enter price" />
+        <input type="number" id="quantity-input" placeholder="Enter quantity" />
+        <button id="item-enter">Add</button>
+
+        <div
+          class="cartItemContainer"
+          style="display: flex; flex-direction: column"
+        ></div>
+
+        <script>
+          const usernameInput = document.getElementById("username-input");
+          const validateUser = document.getElementById("username-enter");
+          const itemInput = document.getElementById("item-input");
+          const priceInput = document.getElementById("price-input");
+          const quantityInput = document.getElementById("quantity-input");
+          const itemSubmit = document.getElementById("item-enter");
+          const usernameText = document.getElementById("username");
+          const cartContainer = document.querySelector(".cartItemContainer");
+          const updateInfo = document.getElementById("updateInfo");
+          const saveUser = document.getElementById("save-user");
+          let currentUser = getLoginPreferences();
+          let userLoggedIn = false;
+
+          checkSavedUser();
+
+          async function checkSavedUser() {
+            if (currentUser) {
+              await updateStaus("Fetching user", 1500);
+              usernameText.textContent = `User logged In : ${currentUser}`;
+              loadCartItems(1500);
+            }
+          }
+
+          saveUser.addEventListener("click", async () => {
+            if (currentUser) {
+              await updateStaus("Saving user", 1000);
+              localStorage.setItem("currentUser", currentUser);
+            } else {
+              alert("No user is logged in currently");
+            }
+          });
+
+          itemSubmit.addEventListener("click", async () => {
+            if (!currentUser) {
+              alert("No user is logged in currently");
+              return;
+            }
+
+            const name = getTrimmedValue(itemInput);
+            const price = getTrimmedValue(priceInput);
+            const quantity = getTrimmedValue(quantityInput);
+
+            if (isEmpty(name)) {
+              alert("item name is empty");
+              return;
+            }
+            if (isEmpty(price)) {
+              alert("price is empty");
+              return;
+            }
+            if (parseInt(price) <= 0) {
+              alert("Price is invalid");
+              return;
+            }
+            if (isEmpty(quantity)) {
+              alert("quantity is empty");
+              return;
+            }
+            if (parseInt(quantity) <= 0) {
+              alert("Quantity is invalid");
+              return;
+            }
+            await updateStaus("Adding items", 100);
+            const item = {
+              item: name,
+              price: price,
+              quantity: quantity,
+            };
+
+            const cartItems = getCartPreferences();
+            cartItems.push(item);
+            localStorage.setItem(currentUser, JSON.stringify(cartItems));
+            resetInputs([itemInput, priceInput, quantityInput]);
+
+            loadCartItems(0);
+          });
+
+          validateUser.addEventListener("click", async () => {
+            const username = getTrimmedValue(usernameInput);
+            if (!username) {
+              alert("Username can't be empty");
+              return;
+            }
+            await updateStaus("Validating user", 1500);
+            const users = getUserPreferences();
+            usernameText.textContent = `User logged In : ${username}`;
+            resetInputs([usernameInput]);
+            currentUser = username;
+            if (!users.includes(username)) {
+              users.push(username);
+              localStorage.setItem("users", JSON.stringify(users));
+            }
+            loadCartItems(1500);
+          });
+
+          async function loadCartItems(duration) {
+            cartContainer.innerHTML = "";
+            await updateStaus("Loading cart items", duration);
+            const cartItems = getCartPreferences();
+            const totalCostText = document.createElement("h4");
+            let totalCost = 0;
+
+            cartItems.forEach((item) => {
+              const cost = parseInt(item.price) * parseInt(item.quantity);
+              const [
+                container,
+                itemText,
+                priceText,
+                quanitiyText,
+                editQuantity,
+                costText,
+                remove,
+              ] = ["div", "p", "p", "p", "i", "p", "button"].map((tag) =>
+                document.createElement(tag)
+              );
+
+              editQuantity.className = "fa fa-edit";
+              editQuantity.style.color = "rgb(56, 73, 99)";
+              container.style.display = "flex";
+              container.style.gap = "10px";
+
+              applyStyles(container, {
+                display: "flex",
+                margin: "0",
+                gap: "10px",
+                "align-items": "center",
+              });
+
+              itemText.style.flex = "6";
+              priceText.style.flex = "1";
+              quanitiyText.style.flex = "1";
+              costText.style.flex = "1";
+              remove.style.flex = "1";
+
+              totalCost += cost;
+              itemText.textContent = item.item;
+              priceText.textContent = item.price;
+              quanitiyText.textContent = item.quantity;
+              costText.textContent = cost.toString();
+              remove.textContent = "Remove";
+
+              container.append(
+                itemText,
+                priceText,
+                editQuantity,
+                quanitiyText,
+                costText,
+                remove
+              );
+              cartContainer.appendChild(container);
+              editQuantity.addEventListener("click", () => {
+                let updatedQuantity = parseInt(prompt("Update quantity"));
+                console.log(updatedQuantity);
+                if (Number.isNaN(updatedQuantity) || updatedQuantity <= 0) {
+                  alert("Quantity is invalid");
+                  return;
+                }
+                item.quantity = updatedQuantity;
+                console.log(cartItems);
+                localStorage.setItem(currentUser, JSON.stringify(cartItems));
+                loadCartItems();
+              });
+
+              remove.addEventListener("click", () => {
+                const newCartItems = cartItems.filter(
+                  (a) =>
+                    !(
+                      a.item == item.item &&
+                      a.price == item.price &&
+                      a.quantity == item.quantity
+                    )
+                );
+                localStorage.setItem(currentUser, JSON.stringify(newCartItems));
+                loadCartItems();
+              });
+            });
+            totalCostText.textContent = `Total cost : ${totalCost}`;
+            cartContainer.appendChild(totalCostText);
+          }
+
+          function updateStaus(status, duration) {
+            return new Promise((resolve) => {
+              updateInfo.textContent = `Current status : ${status}`;
+              setTimeout(() => {
+                updateInfo.textContent = `Current status : None`;
+                resolve();
+              }, duration);
+            });
+          }
+
+          function getLoginPreferences() {
+            const preferences = localStorage.getItem("currentUser") || "";
+            return preferences;
+          }
+
+          function getUserPreferences() {
+            const preferences = JSON.parse(localStorage.getItem("users")) || [];
+            return preferences;
+          }
+
+          function getCartPreferences() {
+            const preferences =
+              JSON.parse(localStorage.getItem(currentUser)) || [];
+            return preferences;
+          }
+
+          function getTrimmedValue(inputelement) {
+            return inputelement.value.trim();
+          }
+
+          function isEmpty(input) {
+            if (typeof input === "string") {
+              return input.length === 0;
+            }
+            return input.some((item) => item.length === 0);
+          }
+
+          function resetInputs(inputs) {
+            [...inputs].forEach((item) => (item.value = ""));
+          }
+
+          function applyStyles(element, styles) {
+            Object.assign(element.style, styles);
+          }
+
+          function createElement(names, types) {
+            // TODO later
+          }
+        </script>
+      </div>
+    </div>
+  </body>
+</html>
