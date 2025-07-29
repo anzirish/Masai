@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <button id="fetch">Fetch</button>
+    <ul id="container"></ul>
+    <script>
+      // get the button element by id
+      const button = document.getElementById("fetch");
+      // Add click event listener to fetch the data
+      button.addEventListener("click", () => {
+        // fetch the data from url
+        fetch("https://jsonplaceholder.typicode.com/users")
+          // convert repsonse to json inuse
+          .then((response) => response.json())
+          // display the data after getting the fetched data
+          .then((data) => displayData(data))
+          .catch((error) => {
+            // log error if get any during api call
+            console.log(error);
+          });
+      });
+
+      // Display the user data in UL
+      function displayData(data) {
+        // log data for debugging prpose
+        console.log(data);
+        // get the container to hold the user data
+        const container = document.getElementById("container");
+        data.forEach((user) => {
+          // create list to append names of the user
+          const li = document.createElement("li");
+          li.textContent = user.name;
+          // append list to ul
+          container.appendChild(li);
+          // add listener to name to show email when clicked
+          li.addEventListener("click", () => {
+            alert(user.email);
+          });
+        });
+      }
+    </script>
+  </body>
+</html>

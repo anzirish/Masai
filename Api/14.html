@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <form action="submit" id="weatherForm">
+      <input type="text" placeholder="Enter city" id="city" />
+      <p id="weather">weather would be displayed here</p>
+      <button type="submit">Get weather</button>
+    </form>
+
+    <script>
+      const weatherForm = document.getElementById("weatherForm");
+      const cityInput = document.getElementById("city");
+      const weatherDisplay = document.getElementById("weather");
+
+      weatherForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const city = cityInput.value;
+        if (!city || typeof city !== "string" || city.trim().length == 0) {
+          alert(`City error`);
+          return;
+        }
+        fetchWeather(city);
+      });
+      const API_KEY = "3a29099de6bf7b1bebe13df4741b99b3";
+      async function fetchWeather(city) {
+        try {
+          const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`;
+          const response = await fetch(url);
+          const data = await response.json();
+          if (data.cod == 404) {
+            alert("City not found");
+            return;
+          }
+          // We can add other checks that can be find on open weather api docs////
+          weatherDisplay.textContent = `Temperature in ${city}: ${data.main.temp}°C`;
+        } catch (error) {
+          alert(error.message);
+        }
+      }
+    </script>
+  </body>
+</html>
