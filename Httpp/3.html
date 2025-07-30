@@ -1,0 +1,272 @@
+<!-- Demo video link : https://www.awesomescreenshot.com/video/42591496?key=34669b5aa6f899f886c43bc65455bab0-->
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <form id="post">
+      <input type="name" placeholder="Enter name" id="name" />
+      <input type="email" placeholder="Enter email" id="email" />
+      <input type="password" placeholder="Enter password" id="password" />
+      <button type="submit">Register</button>
+    </form>
+
+    <p
+      style="
+        height: 50px;
+        background-color: aliceblue;
+        margin: 20px 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      "
+      id="status"
+    >
+      Status will be shown here
+    </p>
+
+    <div id="container" style="display: flex; flex-direction: column"></div>
+
+    <script>
+      const API_BASE_URL = "https://6889c69e4c55d5c739537c42.mockapi.io/users";
+
+      const elements = {
+        post: getById("post"),
+        name: getById("name"),
+        email: getById("email"),
+        password: getById("password"),
+        container: getById("container"),
+        status: getById("status"),
+      };
+
+      document.addEventListener("DOMContentLoaded", initializeApp());
+
+      async function initializeApp() {
+        try {
+          await fetchUsers();
+        } catch (error) {
+          console.log(error);
+          updateStatus("User fetching error");
+        }
+      }
+
+      elements.post.addEventListener("submit", (e) => validateCredentials(e));
+
+      function validateCredentials(e) {
+        e.preventDefault();
+        const name = validateName(elements.name.value);
+        const email = validateEmail(elements.email.value);
+        const password = validatePassword(elements.password.value);
+        const user = { name: name, email: email, password: password };
+        postUser(user);
+      }
+
+      async function postUser(user) {
+        try {
+          const response = await fetch(API_BASE_URL, {
+            method: "POST",
+            headers: {
+              "content-type": "application/json",
+            },
+            body: JSON.stringify(user),
+          });
+          if (!response.ok) {
+            updateStatus(`HTTP Error ${response.status}`);
+            return;
+          }
+          const data = await response.json();
+          log(data);
+          clear([elements.email, elements.password, elements.name]);
+          updateStatus("Create user successfully", "success");
+          fetchUsers();
+        } catch (error) {
+          updateStatus(`${error}`);
+        }
+      }
+
+      function validateName(name) {
+        if (!name || typeof name != "string") {
+          throw new ValidationError("Name is required");
+        }
+        const trimmed = name.trim();
+
+        if (name.length == 0) {
+          throw new ValidationError("Name must not be empty");
+        }
+
+        if (name.length > 30) {
+          throw new ValidationError("Name length must be within 30");
+        }
+
+        return trimmed;
+      }
+
+      function validateEmail(email) {
+        if (!email || typeof email != "string") {
+          throw new ValidationError("Email is required");
+        }
+
+        const trimmed = email.trim();
+
+        if (email.length == 0) {
+          throw new ValidationError("Email must not be empty");
+        }
+
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)) {
+          throw new ValidationError("Invalid email");
+        }
+
+        const users = JSON.parse(localStorage.getItem("users")) || [];
+        users.forEach((user) => {
+          if (user.email == trimmed) {
+            throw new ValidationError("This email is already registered");
+          }
+        });
+
+        return trimmed;
+      }
+
+      function validatePassword(password) {
+        if (!password || typeof password != "string") {
+          throw new ValidationError("Password is required");
+        }
+        const trimmed = password.trim();
+
+        if (password.length == 0) {
+          throw new ValidationError("Password must not be empty");
+        }
+
+        if (password.length > 30) {
+          throw new ValidationError("Password length must be within 30");
+        }
+
+        return trimmed;
+      }
+
+      async function fetchUsers() {
+        try {
+          const response = await fetch(API_BASE_URL);
+          if (!response.ok) {
+            log(`HTTP Error ${response.status}`);
+            return;
+          }
+          const data = await response.json();
+          updateStatus("Fetched data successfully successfully", "success");
+          localStorage.setItem("users", JSON.stringify(data));
+          displayUsers(data);
+        } catch (error) {
+          throw error;
+        }
+      }
+
+      function displayUsers(users) {
+        users.forEach((user) => {
+          const [container, name, email, hr] = ["div", "h4", "h4", "hr"].map(
+            (item) => create(item)
+          );
+          applyStyles(container, {
+            display: "flex",
+            gap: "50px",
+            padding: "10px",
+          });
+          applyStyles(name, {
+            margin: "0px",
+            width: "200px",
+          });
+          applyStyles(email, {
+            margin: "0px",
+          });
+
+          setContents([name, email], [user.name, user.email]);
+          container.append(name, email, hr);
+          elements.container.appendChild(container);
+        });
+        console.log(elements.container);
+      }
+
+      function clear(elements) {
+        elements.forEach((ele) => {
+          if (
+            ele.tagName === "INPUT" ||
+            ele.tagName === "TEXTAREA" ||
+            ele.tagName === "SELECT"
+          ) {
+            ele.value = "";
+          } else {
+            ele.innerHTML = "";
+          }
+        });
+      }
+
+      function setContents(elements, contents) {
+        for (let i = 0; i < elements.length; i++) {
+          let ele = elements[i];
+          let content = contents[i];
+          if (
+            ele.tagName == "INPUT" ||
+            ele.tagName == "TEXTAREA" ||
+            ele.tagName == "SELECT"
+          ) {
+            elements[i].value = contents[i];
+          } else {
+            elements[i].textContent = contents[i];
+          }
+        }
+      }
+
+      function applyStyles(element, styles) {
+        Object.assign(element.style, styles);
+      }
+
+      function create(type) {
+        return document.createElement(type);
+      }
+
+      class ValidationError extends Error {
+        constructor(message) {
+          super(message);
+          this.name = "Validation Error";
+          updateStatus(message);
+        }
+      }
+
+      function getById(id) {
+        const element = document.getElementById(id);
+        if (!element) {
+          throw new Error(`No element found with id ${id}`);
+        }
+        return element;
+      }
+
+      function log(msg) {
+        console.log(msg);
+      }
+
+      function updateStatus(msg, tag = "failure") {
+        clear([elements.status]);
+        if (tag == "success") {
+          applyStyles(elements.status, {
+            color: "green",
+            backgroundColor: "rgb(139, 255, 164)",
+          });
+        } else {
+          applyStyles(elements.status, {
+            color: "red",
+            backgroundColor: "rgb(255, 141, 113)",
+          });
+        }
+        setContents([elements.status], [msg]);
+      }
+    </script>
+  </body>
+</html>

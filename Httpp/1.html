@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<!--Incomplete implementation-->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <label>Select category: </label>
+    <select id="select">
+      <option value="All">All</option>
+      <option value="Accessories">Accessories</option>
+      <option value="Books">Books</option>
+      <option value="Electronics">Electronics</option>
+      <option value="Fashion">Fashion</option>
+      <option value="Fitness">Fitness</option>
+      <option value="Home Appliances">Home Appliances</option>
+      <option value="Home Decor">Home Decor</option>
+      <option value="Outdoor">Outdoor</option>
+      <option value="Personal Care">Personal Care</option>
+      <option value="Photography">Photography</option>
+      <option value="Sports">Sports</option>
+      <option value="Stationery">Stationery</option>
+      <option value="Tools">Tools</option>
+      <option value="Toys">Toys</option>
+    </select>
+    <input type="number" id="min_price" placeholder="Min price" />
+    <input type="number" id="max_price" placeholder="Max price" />
+    <button id="search">Search</button>
+
+    <div id="container"></div>
+    <script>
+      const API_BASE_URL =
+        "https://688970ae4c55d5c739526375.mockapi.io/products";
+
+      const elements = {
+        selectCategory: getById("select"),
+        minPrice: getById("min_price"),
+        maxPrice: getById("max_price"),
+        search: getById("search"),
+        container: getById("container"),
+      };
+
+      elements.search.addEventListener("click", searchProducts);
+
+      async function searchProducts() {
+        const minPrice = parseFloat(elements.minPrice.value) || "";
+        const maxPrice = parseFloat(elements.maxPrice.value) || "";
+        const url = generateApiUrl(
+          minPrice,
+          maxPrice,
+          elements.selectCategory.value
+        );
+
+        // const response = await fetch(url);
+        // const data = await response.json();
+        console.log(url);
+      }
+
+      function generateApiUrl(
+        minPrice = "",
+        max_price = "",
+      ) {
+        // if min and max both price are given then too, sort by min price
+        const category = elements.selectCategory.value
+        if (minPrice) {
+          if (category == "All") {
+            return `${API_BASE_URL}?sortBy=price&order=asc`;
+          } else {
+            return `${API_BASE_URL}?category=${category}&sortBy=price&order=asc`;
+          }
+        } else if (max_price) {
+          if (category == "All") {
+            return `${API_BASE_URL}?sortBy=price&order=desc`;
+          } else {
+            return `${API_BASE_URL}?category=${category}&sortBy=price&order=desc`;
+          }
+        } else if (category !== "All") {
+          return `${API_BASE_URL}?category=${category}&order=${order}`;
+        } else {
+          return API_BASE_URL;
+        }
+      }
+      function validatePrice(tag, price) {
+        price = parseFloat(price);
+        if (isNaN(price) || price < 0) {
+          throw new ValidationError(`Input ${tag} price is invalid`);
+        }
+        return Math.round(price * 100) / 100;
+      }
+
+      class ValidationError extends Error {
+        constructor(message) {
+          super(message);
+          this.name = "Validation Error";
+        }
+      }
+
+      function getById(id) {
+        const element = document.getElementById(id);
+        if (!element) {
+          throw new Error(`No element found with id ${id}`);
+        }
+        return element;
+      }
+    </script>
+  </body>
+</html>
