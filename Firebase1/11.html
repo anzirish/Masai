@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .table {
+        border: 2px, solid, black;
+        padding: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <script>
+      fetchAPI();
+      async function fetchAPI() {
+        try {
+          const response = await fetch(
+            "https://masai-639e4-default-rtdb.asia-southeast1.firebasedatabase.app/project1/users.json"
+          );
+          if (!response.ok) {
+            console.log(`HTTP error ${response.status}`);
+            return;
+          }
+          if (response.ok) {
+            const data = await response.json();
+
+            const users = Object.entries(data).map(([id, value]) => ({
+              id,
+              ...value,
+            }));
+            displayData(users);
+          } else {
+            console.log(`HTTP error ${response.status}`);
+          }
+        } catch (error) {
+          console.log(error.message);
+        }
+      }
+
+      function displayData(users) {
+        console.log(users);
+        const table = document.createElement("table");
+        table.classList.add("table")
+        table.innerHTML = `<thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>`;
+        users.forEach((user) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${user.name}</td>
+            <td>${user.email}</td>
+            `;
+          table.appendChild(row);
+        });
+        document.body.appendChild(table);
+      }
+    </script>
+  </body>
+</html>
