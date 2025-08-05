@@ -1,28 +1,47 @@
-document.addEventListener("DOMContentLoaded", fetchApi);
-const API_BASE_URL =
-  "https://dfdsfgdgdf-a2a80-default-rtdb.asia-southeast1.firebasedatabase.app/members.json";
-const container = document.getElementById("gallery");
+const gallery = document.getElementById("gallery");
+const loader = document.getElementById("loader");
 
-async function fetchApi() {
+let limit = 10;
+let page = 1;
+let loading = false;
+
+async function fetchImages() {
+  if (loading) return;
+
+  loading = true;
+  loader.style.display = "block";
+
   try {
-    const reposnse = await fetch(API_BASE_URL);
-    if (reposnse.ok) {
-      const data = await reposnse.json();
-      const users = Object.entries(data).map(([id, item]) => ({
-        id,
-        ...item,
-      }));
-      displayImages(users)
-    }
+    const res = await fetch(`https://jsonplaceholder.typicode.com/photos?_page=${page}&_limit=${limit}`);
+    const images = await res.json();
+
+    renderImages(images);
+    page++;
   } catch (error) {
-    console.log(error);
+    console.error("Error fetching images:", error);
   }
+
+  loader.style.display = "none";
+  loading = false;
 }
 
-function displayImages(users) {
-  users.forEach((user) => {
-    const img = document.createElement("img");
-    img.src = user.avatar;
-    container.appendChild(img);
+function renderImages(images) {
+  images.forEach((img) => {
+    const div = document.createElement("div");
+    div.className = "image-card";
+    div.innerHTML = `
+      <img src="${img.thumbnailUrl}" alt="${img.title}" />
+      <p>${img.title}</p>
+    `;
+    gallery.appendChild(div);
   });
 }
+
+window.addEventListener("scroll", () => {
+  const nearBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 100;
+  if (nearBottom && !loading) {
+    fetchImages();
+  }
+});
+
+fetchImages();
