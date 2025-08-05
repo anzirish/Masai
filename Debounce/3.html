@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div style="width: 30%; margin: auto; border: 2px solid aqua">
+      <img
+        id="image"
+        style="width: 100%; height: auto"
+        src="https://picsum.photos/v2/list?page=1&limit=30#:~:text=https%3A//unsplash.com/photos/yC%2DYzbqy7PY"
+        alt=""
+      />
+      <h4 id="slide" style="text-align: center">Slide no : 44</h4>
+      <button id="prev" onclick="handleClick('prev')">Prev</button>
+      <button id="next" style="float: right" onclick="handleClick('next')">
+        Next
+      </button>
+    </div>
+    <script>
+      let slide = 1;
+      const img = document.getElementById("image");
+      const slider = document.getElementById("slide");
+      document.addEventListener("DOMContentLoaded", loadImg);
+      let lastClicked = Date.now();
+      let timesClicked = 0;
+      function loadImg() {
+        console.log("hello");
+        const date = Date.now();
+        img.src = `https://picsum.photos/600/400?random=${date}`;
+        slider.textContent = `SLide : ${slide}`;
+      }
+
+      function handleClick(tag) {
+        timesClicked++;
+        const currentClicked = Date.now();
+        if (currentClicked - lastClicked < 1000) {
+          if (timesClicked >= 3) {
+            alert(`Chill we're loading for you`);
+          }
+          return;
+        }
+        lastClicked = currentClicked;
+        timesClicked = 0;
+
+        if (tag == "next") {
+          slide++;
+        } else {
+          slide--;
+        }
+        loadImg();
+      }
+    </script>
+  </body>
+</html>
