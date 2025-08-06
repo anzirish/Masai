@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database-compat.js"></script>
+  </head>
+  <style>
+    #form-group {
+      width: 30%;
+      margin: auto;
+    }
+    input,
+    button {
+      width: 100%;
+      padding: 10px;
+      box-sizing: border-box;
+      border-radius: 5px;
+      margin-bottom: 20px;
+    }
+  </style>
+  <body>
+    <div id="form-group">
+      <input
+        type="text"
+        placeholder="Enter name"
+        id="name-input-register"
+        required
+      />
+      <input
+        type="text"
+        placeholder="Enter email"
+        id="email-input-register"
+        required
+      />
+      <input
+        type="password"
+        placeholder="Enter password"
+        id="input-password-register"
+        required
+      />
+      <button id="register" type="submit" onclick="register()">Register</button>
+    </div>
+    <script>
+      if (localStorage.getItem("uid")) {
+        window.location.href = 'dashboard.html'
+      }
+      const firebaseConfig = {
+        apiKey: "AIzaSyCsXidgP5gl32q7Ax07t7uv7l8Y21dGgDI",
+        authDomain: "ddddd-c2529.firebaseapp.com",
+        projectId: "ddddd-c2529",
+        storageBucket: "ddddd-c2529.firebasestorage.app",
+        messagingSenderId: "941333365341",
+        appId: "1:941333365341:web:a559bd4eea6409528e03b4",
+        databaseURL:
+          "https://ddddd-c2529-default-rtdb.asia-southeast1.firebasedatabase.app",
+      };
+
+      firebase.initializeApp(firebaseConfig);
+      const auth = firebase.auth();
+
+      const nameInputRegister = document.getElementById("name-input-register");
+      const passwordInputRegister = document.getElementById('input-password-register');
+      const emailInputRegister = document.getElementById(
+        "email-input-register"
+      );
+
+      function register() {
+        const name = nameInputRegister.value;
+        const email = emailInputRegister.value;
+        const password = passwordInputRegister.value;
+
+        auth
+          .createUserWithEmailAndPassword(email, password)
+          .then((userCredential) => {
+            nameInputRegister.value = "";
+            emailInputRegister.value = "";
+            passwordInputRegister.value = "";
+            const user = { name, email, password };
+            const uid = auth.currentUser.uid;
+            addUser(user, uid);
+          })
+          .catch((err) => alert(err.message));
+      }
+
+      function addUser(user, uid) {
+        console.log(user, uid);
+        firebase
+          .database()
+          .ref(`users/${uid}`)
+          .set(user)
+          .then(() => {
+            console.log("User data saved successfully");
+            localStorage.setItem("uid", uid);
+            window.location.href = "login.html";
+          })
+          .catch((error) => {
+            alert(error.message);
+          });
+      }
+    </script>
+  </body>
+</html>
