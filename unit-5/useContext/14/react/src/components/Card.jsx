@@ -1,18 +1,18 @@
+import { Box, Text } from "@chakra-ui/react";
+import { useContext } from "react";
+import { ThemeContext } from "../context/ThemeContext";
+
 export const Card = ({ product }) => {
+  const { theme } = useContext(ThemeContext);
+
   return (
-    <>
-      <div
-        style={{
-          width: "100px",
-          height: "auto",
-          padding: "16px",
-          borderRadius: "12px",
-          border: "1px solid aqua",
-          boxShadow: "2px 2px 6px rgba(0,0,0,0.5)",
-        }}
-      >
-        {product}
-      </div>
-    </>
+    <Box
+      p="6"
+      shadow="md"
+      borderRadius="md"
+      bg={theme === "light" ? "gray.100" : "gray.800"}
+    >
+      <Text>{product}</Text>
+    </Box>
   );
 };

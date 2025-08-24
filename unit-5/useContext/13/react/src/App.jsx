@@ -1,8 +1,7 @@
-// App.jsx
-import { Box, Button, Flex, Grid } from "@chakra-ui/react";
+import { Box, Flex, Grid, Button } from "@chakra-ui/react";
 import { useContext } from "react";
-import { AuthContext } from "../context/AuthContext";
-import { ThemeContext } from "../context/ThemeContext";
+import { AuthContext } from "./AuthContext";
+import { ThemeContext } from "./ThemeContext";
 
 function App() {
   const { isLoggedIn, toggleAuth } = useContext(AuthContext);
@@ -13,39 +12,50 @@ function App() {
       <Flex
         as="nav"
         p="4"
-        bg={theme === "light" ? "gray.100" : "gray.700"}
+        bg={theme === "light" ? "gray.200" : "gray.700"}
         justifyContent="space-between"
-        alignItems="center"
       >
-        <Button onClick={toggleAuth} colorScheme="blue">
+        <Button
+          onClick={toggleAuth}
+          bg={theme === "light" ? "gray.100" : "gray.800"}
+          color={theme === "light" ? "gray.900" : "gray.100"}
+        >
           {isLoggedIn ? "Log Out" : "Log In"}
         </Button>
-        <Button onClick={toggleTheme} colorScheme="teal">
+        <Button
+          onClick={toggleTheme}
+          bg={theme === "light" ? "gray.100" : "gray.800"}
+          color={theme === "light" ? "gray.900" : "gray.100"}
+        >
           Toggle to {theme === "light" ? "Dark" : "Light"} Theme
         </Button>
       </Flex>
-      
-      <Grid templateColumns="repeat(3, 1fr)" gap="4" p="4">
+      <Grid
+        templateColumns={{
+          base: "1fr",
+          sm: "repeat(2, 1fr)",
+          md: "repeat(3, 1fr)",
+        }}
+        gap="4"
+        p="4"
+      >
         {["Card 1", "Card 2", "Card 3"].map((card) => (
-          <Box 
-            key={card} 
-            p="4" 
-            shadow="md" 
-            bg={theme === "light" ? "gray.200" : "gray.600"}
-            borderRadius="md"
-            color={theme === "light" ? "gray.800" : "white"}
+          <Box
+            key={card}
+            p="4"
+            shadow="md"
+            bg={theme === "light" ? "gray.100" : "gray.700"}
+            color={theme === "light" ? "gray.900" : "gray.100"}
           >
             {card}
           </Box>
         ))}
       </Grid>
-      
-      <Box 
-        as="footer" 
-        p="4" 
-        bg={theme === "light" ? "gray.300" : "gray.800"}
-        color={theme === "light" ? "gray.800" : "white"}
-        textAlign="center"
+      <Box
+        as="footer"
+        p="4"
+        bg={theme === "light" ? "gray.100" : "gray.700"}
+        color={theme === "light" ? "gray.900" : "gray.100"}
       >
         Footer Content
       </Box>
