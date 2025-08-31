@@ -1,35 +1,19 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Box, Container, Heading } from "@chakra-ui/react";
+import { TodoInput } from "./components/TodoInput";
+import { TodoList } from "./components/TodoList";
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <Container maxW="md" centerContent py={10}>
+      <Box p={5} shadow="md" borderWidth="1px" borderRadius="lg" w="100%">
+        <Heading mb={4} textAlign="center" color="teal.600">
+          Redux Todo App
+        </Heading>
+        <TodoInput />
+        <TodoList />
+      </Box>
+    </Container>
+  );
 }
 
-export default App
+export default App;
