@@ -1,35 +1,44 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useCallback, useState } from "react";
+import "./App.css";
+import Post from "./Post";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [title, setTitle] = useState("");
+  const [body, setBody] = useState("");
+  const [posts, setPosts] = useState([]);
+
+  const submitHandler = () => {
+    if (!title.trim() || !body.trim()) return;
+    const post = { id: Date.now(), verify: false, title, body };
+    setPosts((prev) => [...prev, post]);
+  };
+
+  const toggle = useCallback((index) =>
+    setPosts((prev) =>
+      prev.map((post, i) =>
+        i === index ? { ...post, verify: !post.verify } : post
+      )
+    )
+  );
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <input
+        placeholder="Enter title"
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+      />
+      <input
+        placeholder="Enter body"
+        value={body}
+        onChange={(e) => setBody(e.target.value)}
+      />
+      <button onClick={submitHandler}>Add post</button>
+      {posts.map((post, index) => {
+        return <Post post={post} toggleVerify={() => toggle(index)} />;
+      })}
     </>
-  )
+  );
 }
 
-export default App
+export default App;
