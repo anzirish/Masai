@@ -1,14 +1,11 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
-const useToggleItems = (items, position = 0) => {
-  const [data, setData] = useState({ items, position });
+export function useToggleItems(initialValue, initialPosition = 0) {
+  const [index, setIndex] = useState(initialPosition);
 
   const toggleState = () => {
-    if (data.items.length == 0) return;
-    setData({ ...data, position: position.length % position });
+    setIndex((prevIndex) => (prevIndex + 1) % initialValue.length);
   };
 
-  return [data.items, toggleState];
-};
-
-export default useToggleItems;
+  return [initialValue[index], toggleState];
+}
