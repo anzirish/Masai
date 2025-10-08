@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const userSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
-  password: { type: String, required: true, min: 6 },
+  password: { type: String, required: true, minLength: 6 },
   profiles: [
     {
       profileName: {
@@ -20,4 +20,4 @@ const userSchema = new mongoose.Schema({
   ],
 });
 
-export const User = mongoose.model("users", userSchema);
+export const User = mongoose.model("Users", userSchema);
