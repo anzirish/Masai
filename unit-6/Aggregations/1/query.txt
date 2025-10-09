@@ -1,0 +1,19 @@
+1. db["sales"].aggregate([{ $group: { _id: "$category", TotalSaleAmount: { $sum: "$amount" } } }])
+
+2. db["sales"].aggregate([{ $group: { _id: { $month: { $toDate: "$date" } }, TotalSaleAmount: { $sum: "$amount" } } }, { $sort: { "_id": 1 } }])
+
+3. db["sales"].aggregate([{ $group: { _id: "$product", TotalRevenue: { $sum: "$amount" } } }, { $sort: { TotalRevenue: -1 } }, { $limit: 1 }])
+
+4. db["sales"].aggregate([{ $group: { _id: null, AvgSaleAmount: { $avg: "$amount" } } }])
+
+5. db["sales"].aggregate([{ $group: { _id: { $month: { $toDate: "$date" } }, SalesCount: { $sum: 1 } } }, { $sort: { "_id": 1 } }])
+
+6. db["sales"].aggregate([{ $group: { _id: "$region", TotalSales: { $sum: "$amount" } } }])
+
+7. db["sales"].aggregate([{ $group: { _id: "$product", TotalRevenue: { $sum: "$amount" } } }, { $sort: { TotalRevenue: -1 } }, { $limit: 3 }])
+
+8. db["sales"].aggregate([{ $group: { _id: "$category", TotalTransactions: { $sum: 1 } } }])
+
+9. db["sales"].aggregate([{ $group: { _id: "$region", AvgSaleAmount: { $avg: "$amount" } } }])
+
+10. db["sales"].aggregate([{ $match: { category: { $in: ["Electronics", "Fashion"] } } }, { $group: { _id: "$category", TotalSaleAmount: { $sum: "$amount" } } }])
