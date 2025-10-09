@@ -1,0 +1,19 @@
+1. db["orders"].aggregate([ { $group: { _id: "$productName", TotalQuantity: { $sum: "$quantity" } } }, { $sort: { TotalQuantity: -1 } }, { $limit: 3 } ])
+
+
+2. db["orders"].aggregate([ { $group: { _id: "$category", TotalRevenue: { $sum: "$totalPrice" } } } ])
+
+3. db["orders"].aggregate([ { $group: { _id: null, AvgOrderPrice: { $avg: "$totalPrice" } } } ])
+
+4. db["orders"].aggregate([ { $group: { _id: { month: { $month: { $toDate: "$orderDate" } }, year: { $year: { $toDate: "$orderDate" } } }, OrderCount: { $sum: 1 } } }, { $sort: { "_id.year": 1, "_id.month": 1 } } ])
+
+5. db["orders"].aggregate([ { $group: { _id: null, TotalOrders: { $sum: 1 }, CanceledOrders: { $sum: { $cond: [ { $eq: [ "$status", "Cancelled" ] }, 1, 0 ] } } } }, { $project: { CanceledPercentage: { $multiply: [ { $divide: [ "$", "$TotalOrders" ] }, 100 ] } } } ])
+
+6. db["orders"].aggregate([ { $group: { _id: "$category", TotalRevenue: { $sum: "$totalPrice" } } }, { $sort: { TotalRevenue: -1 } }, { $limit: 1 } ])
+
+7. db["orders"].aggregate([ { $group: { _id: "$productName", OrderCount: { $sum: 1 } } }, { $sort: { OrderCount: -1 } }, { $limit: 1 } ])
+
+8. db["orders"].aggregate([ { $group: { _id: { month: { $month: { $toDate: "$orderDate" } }, year: { $year: { $toDate: "$orderDate" } } }, MonthlyRevenue: { $sum: "$totalPrice" } } }, { $sort: { "_id.year": 1, "_id.month": 1 } } ])
+
+9. db["orders"].aggregate([ { $group: { _id: "$status", Count: { $sum: 1 } } } ])
+10. db["orders"].aggregate([ { $group: { _id: null, TotalOrders: { $sum: 1 }, TotalQuantity: { $sum: "$quantity" } } } ])

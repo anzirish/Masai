@@ -1,0 +1,9 @@
+1. db["orders"].aggregate([{ $group: { _id: "$customerId", TotalSpent: { $sum: "$amount" } }}])
+
+2. db["orders"].aggregate([{ $lookup: { from: "customers", localField: "customerId", foreignField: "_id", as: "customerDetails" }}])
+
+3. db["orders"].aggregate([{ $match: { amount: { $gt: 500 }} }])
+
+4. db["orders"].aggregate([{ $group: { _id: "$customerId", AvgOrderAmount: { $avg: "$amount" }} }])
+
+5. db["orders"].aggregate([{ $lookup: { from: "customers", localField: "customerId", foreignField: "_id", as: "customerInfo" } }, { $unwind: "$customerInfo" }])
