@@ -1,1 +1,8 @@
 Testing/
+
+# Node modules ata any level
+**/node_modules/
+
+# Ignore all environment files at any level
+**/.env
+**/.env.*
