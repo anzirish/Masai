@@ -1,38 +1,76 @@
-import express from "express";
-import mongoose from "mongoose";
-import passport from "passport";
-import jwt from "jsonwebtoken";
-import session from "express-session";
-import dotenv from "dotenv";
-import "./passport.js";
+require("dotenv").config();
+const express = require("express");
+const passport = require("passport");
+const GitHubStrategy = require("passport-github2").Strategy;
+const jwt = require("jsonwebtoken");
+const connectToDB = require("./db.js");
+const User = require("./user.js");
 
-dotenv.config();
 const app = express();
 
-app.use(session({ secret: "github_secret", resave: false, saveUninitialized: true }));
+connectToDB();
+
+// Passport setup
+passport.use(
+  new GitHubStrategy(
+    {
+      clientID: process.env.GITHUB_CLIENT_ID,
+      clientSecret: process.env.GITHUB_CLIENT_SECRET,
+      callbackURL: process.env.GITHUB_CALLBACK_URL,
+      scope: ["user:email"],
+    },
+    async (accessToken, refreshToken, profile, done) => {
+      try {
+        let email =
+          profile.emails && profile.emails[0] ? profile.emails[0].value : null;
+        const userData = {
+          githubId: profile.id,
+          username: profile.username,
+          email,
+        };
+        done(null, userData);
+      } catch (err) {
+        done(err);
+      }
+    }
+  )
+);
+
 app.use(passport.initialize());
-app.use(passport.session());
 
-mongoose.connect(process.env.MONGO_URI);
+// Routes
 
-// 🌐 GitHub login route
-app.get("/auth/github", passport.authenticate("github", { scope: ["user:email"] }));
+app.get(
+  "/auth/github",
+  passport.authenticate("github", { scope: ["user:email"] })
+);
 
-// 🎯 Callback route after GitHub login
 app.get(
   "/home",
-  passport.authenticate("github", { failureRedirect: "/login" }),
-  (req, res) => {
-    // Generate JWT token for the user
-    const token = jwt.sign(
-      { id: req.user._id, username: req.user.username },
-      process.env.JWT_SECRET,
-      { expiresIn: "2h" }
-    );
+  passport.authenticate("github", {
+    session: false,
+    failureRedirect: "/auth/failure",
+  }),
+  async (req, res) => {
+    try {
+      let user = await User.findOne({ githubId: req.user.githubId });
+      if (!user) user = await User.create(req.user);
 
-    // Respond with the token (you can redirect or send JSON)
-    res.json({ message: "Login successful", token });
+      const token = jwt.sign(
+        { id: user._id, githubId: user.githubId, username: user.username },
+        process.env.JWT_SECRET,
+        { expiresIn: "7d" }
+      );
+
+      res.json({ token });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
   }
 );
 
-app.listen(8080, () => console.log("Server running on http://localhost:8080"));
+app.get("/auth/failure", (req, res) =>
+  res.status(401).json({ error: "GitHub login failed" })
+);
+
+app.listen(process.env.PORT, () => console.log(`listening...`));
