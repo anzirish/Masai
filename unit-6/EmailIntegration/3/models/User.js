@@ -17,6 +17,8 @@ const userSchema = new mongoose.Schema(
       default: "user",
       required: true,
     },
+    resetPasswordToken: { type: String },
+    resetPasswordExpires: { type: Number },
   },
   { timestamps: true }
 );
@@ -31,7 +33,7 @@ userSchema.pre("save", async function (next) {
   const saltRounds = Number(process.env.PASSWORD_SALT_ROUND_TEST);
   const salt = await bcrypt.genSalt(saltRounds); // best practices
   this.password = await bcrypt.hash(this.password, salt);
-  
+
   next();
 });
 
