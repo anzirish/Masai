@@ -5,6 +5,7 @@ import { authRoutes } from "./routes/authRoutes.js";
 import { connectToDB } from "./configs/db.js";
 import { orderRoutes } from "./routes/orderRoutes.js";
 import { authMiddleware } from "./middlewares/authMiddleware.js";
+import { swaggerSpec, swaggerUi } from "./swagger.js";
 
 configDotenv()
 connectToDB()
@@ -15,6 +16,9 @@ app.use(cors()); // Enables frontend → backend calls
 app.use(express.json());
 app.use("/auth", authRoutes);
 app.use("/orders", authMiddleware, orderRoutes);
+
+// Swagger route
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.get("/", (req, res) => {
   res.status(200).json({ msg: "Server is running!!!" });
