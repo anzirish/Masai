@@ -62,7 +62,7 @@ export const insertBulkData = async (req, res) => {
 };
 
 const scheduleBulkBooksProcess = (id) => {
-  cron.schedule("*/10 * * * * *", async () => {
+  cron.schedule("*/2 * * * *", async () => {
     const books = await getBulkData(id);
     setBulkBooksToDB(id, books);
   });
