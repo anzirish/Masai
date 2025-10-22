@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body></body>
+</html>
+
+<script>
+  const inputEle = document.createElement("input");
+  inputEle.placeholder = "Type task";
+  inputEle.style.marginInline = "10px";
+
+  document.body.appendChild(inputEle);
+
+  const AddEle = document.createElement("button");
+  AddEle.textContent = "Add Task";
+
+  document.body.appendChild(AddEle);
+
+  const br = document.createElement("br");
+  document.body.appendChild(br);
+
+  const ul = document.createElement("ul");
+  ul.style.margin = "0px";
+  ul.style.padding = "0px";
+
+  document.body.appendChild(ul);
+
+  AddEle.addEventListener("click", () => {
+    const value = inputEle.value.trim();
+
+    if (!value) {
+      alert("Task is empty");
+      return;
+    }
+
+    const li = document.createElement("li");
+    const container = document.createElement("div");
+    const para = document.createElement("p");
+    const deleteTask = document.createElement("button");
+    const completeTask = document.createElement("button");
+
+    para.textContent = value;
+    deleteTask.textContent = "Delete Task";
+    completeTask.textContent = "Complete Task";
+    container.style.display = "flex";
+    container.style.height = "30px";
+    container.style.gap = "10px";
+    container.style.margin = "10px";
+    container.style.alignItems = "center";
+    li.style.listStyleType = "none";
+    container.appendChild(para);
+    container.appendChild(deleteTask);
+    container.appendChild(completeTask);
+
+    li.appendChild(container);
+    ul.appendChild(li);
+
+    deleteTask.addEventListener("click", () => {
+      document.body.removeChild(ul);
+      ul.removeChild(li);
+      document.body.appendChild(ul);
+    });
+
+    completeTask.addEventListener("click", () => {
+      completeTask.style.backgroundColor = "green";
+      completeTask.textContent = "Task completed";
+      completeTask.style.color = "white";
+      completeTask.disabled = true
+      para.style.textDecoration = 'line-through'
+    });
+  });
+</script>

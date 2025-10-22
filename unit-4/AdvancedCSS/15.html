@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      nav section ul :hover {
+        color: aqua;
+      }
+      nav section ul :active {
+        color: red;
+      }
+
+      #home > ul {
+        background-color: rgb(227, 197, 158);
+      }
+
+      #content > ul {
+        background-color: rgb(185, 109, 10);
+      }
+
+      #contact > ul {
+        background-color: rgb(97, 58, 6);
+      }
+
+      a[href^="https"] {
+        color: green;
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <section id="home">
+        Home
+        <ul>
+          <li><a href="https://www.google.com">Kitchen</a></li>
+          <li><a href="http://www.noogle.com">Bedroom</a></li>
+        </ul>
+      </section>
+
+      <section id="content">
+        Content
+        <ul>
+          <li><a href="https://www.utube.com">Main</a></li>
+          <li><a href="https://www.ubantu.com">Conclusion</a></li>
+        </ul>
+      </section>
+      <section id="contact">
+        Contact
+        <ul>
+          <li><a href="http://www.message.com">Message</a></li>
+          <li><a href="http://www.gmail.com">Gmial</a></li>
+        </ul>
+      </section>
+    </nav>
+  </body>
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      body {
+        padding: 40px;
+        background-color: azure;
+      }
+
+      input[type="text"],
+      textarea,
+      p {
+        width: 100%;
+        padding: 10px;
+        background-color: white;
+        margin-bottom: 16px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+
+      button {
+        padding: 10px 16px;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <form id="form">
+      <label for="username">Username:</label>
+      <input type="text" id="username" name="username" required />
+
+      <label for="message">Message:</label>
+      <textarea id="message" name="message" rows="4" required></textarea>
+
+      <p id="status">Status will be display here</p>
+
+      <button type="submit">Send</button>
+
+      <script>
+        document
+          .getElementById("form")
+          .addEventListener("submit", (e) => validateData(e));
+        function validateData(e) {
+          e.preventDefault();
+          const name = document.getElementById("username").value.trim();
+          const message = document.getElementById("message").value.trim();
+
+          if (!name || !message) {
+            showStatus("Username or message is not valid");
+            return;
+          }
+          const user = {
+            username: name,
+            message: message,
+          };
+          postData(user);
+        }
+
+        async function postData(user) {
+          console.log(user);
+          try {
+            const response = await fetch(
+              "https://masai-639e4-default-rtdb.asia-southeast1.firebasedatabase.app/project2/users.json",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(user),
+              }
+            );
+
+            if (response.ok) {
+              document.getElementById("username").value = "";
+              document.getElementById("message").value = "";
+              const data = await response.json();
+              showStatus("Data posted successfully");
+            } else {
+              showStatus(`HTTP error ${response.status}`);
+            }
+          } catch (error) {
+            showStatus(error);
+          }
+        }
+
+        function showStatus(msg) {
+          document.getElementById("status").textContent = msg;
+        }
+      </script>
+    </form>
+  </body>
+</html>

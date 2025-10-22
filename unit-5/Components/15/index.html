@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <!-- React & ReactDOM -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <!-- Babel for JSX -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/babel">
+      const { useState } = React;
+      const blogs = [
+        {
+          title: "Mastering JavaScript",
+          content: "JavaScript is a powerful language for web development.",
+        },
+        {
+          title: "React in Indian Startups",
+          content: "React is widely used in many Indian tech companies.",
+        },
+        {
+          title: "Career in Web Development",
+          content: "Explore job roles and growth in web development.",
+        },
+      ];
+
+      function App({ blogs }) {
+        const [selected, select] = useState(null);
+
+        return (
+          <div>
+            {blogs.map((blog) => {
+              return (
+                <div>
+                  <h2
+                    onClick={() => select(selected?.title === blog.title ? null : blog)}
+                    style={{ color: "blue", cursor: "pointer" }}
+                  >
+                    {blog.title}
+                  </h2>
+                </div>
+              );
+            })}
+            <hr />
+            {selected ? (
+              <div>
+                <h2>{selected.title}</h2>
+                <p>{selected.content}</p>
+              </div>
+            ) : (
+              <p>Select a blog to read</p>
+            )}
+          </div>
+        );
+      }
+
+      const root = ReactDOM.createRoot(document.getElementById("root"));
+      root.render(<App blogs={blogs} />);
+    </script>
+  </body>
+</html>

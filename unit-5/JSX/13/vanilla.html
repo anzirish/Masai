@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <p>Click count :<span id="count">0</span></p>
+    <h1 id="title">Title here!</h1>
+    <button onclick="clicked()">Change title</button>
+  </body>
+  <script>
+    const title = document.getElementById("title");
+    const count = document.getElementById("count");
+    let clicks = 0;
+    function clicked() {
+      clicks++;
+      title.textContent = `Changed title ${Date.now()}`;
+      count.textContent = clicks;
+    }
+  </script>
+</html>

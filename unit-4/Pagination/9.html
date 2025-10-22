@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style></style>
+  </head>
+  <body>
+    <button id="fetch" onclick="fetchTodos()">Fetch todos</button>
+    <div
+      id="container"
+      style="display: flex; flex-direction: column; gap: 10px"
+    ></div>
+    <div id="page-button-container" style="display: flex; gap: 30px; position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background-color: red;"></div>
+    <script>
+      let currentPage = 1;
+      let totalPages = 1;
+      let itemsPerPage = 10;
+      const buttonContainer = document.getElementById("page-button-container");
+      const container = document.getElementById("container");
+
+      async function fetchTodos() {
+        buttonContainer.innerHTML = ''
+        const respone = await fetch(
+          "https://jsonplaceholder.typicode.com/todos"
+        );
+        if (respone.ok) {
+          const todos = await respone.json();
+          createButtons(todos);
+          display(todos);
+        }
+      }
+
+      function createButtons(todos) {
+        const length = todos.length;
+        totalPages = Math.ceil(length / itemsPerPage);
+
+        for (let i = 0; i < totalPages; i++) {
+          const button = document.createElement("button");
+          button.textContent = i + 1;
+          buttonContainer.appendChild(button);
+          button.addEventListener("click", () => {
+            const btn = parseInt(button.textContent);
+            if (btn != currentPage) {
+              currentPage = btn;
+              display(todos, btn);
+            }
+          });
+        }
+      }
+
+      function display(todos, page = 1) {
+        container.innerHTML = "";
+        for (
+          let i = page * itemsPerPage - itemsPerPage;
+          i < itemsPerPage * page;
+          i++
+        ) {
+          const div = document.createElement("div");
+          const p = document.createElement("p");
+          const p2 = document.createElement("p");
+
+          p.textContent = todos[i].title;
+          p2.textContent = todos[i].completed
+            ? "Task completed"
+            : "Task not completed";
+          div.style.border = "2px solid aqua";
+          div.append(p, p2);
+          container.appendChild(div);
+        }
+      }
+    </script>
+  </body>
+</html>

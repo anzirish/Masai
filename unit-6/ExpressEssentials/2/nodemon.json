@@ -1,0 +1,10 @@
+{
+  "watch": ["index.js", "routes/", "controllers/"],
+  "ext": "js,json",
+  "execMap": {
+    "js": "node"
+  },
+  "events": {
+    "restart": "cls"
+  }
+}

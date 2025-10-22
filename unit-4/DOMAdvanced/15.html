@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .container {
+        display: flex;
+        flex-direction: column;
+      }
+      .tasksListContainer {
+        display: flex;
+        flex-direction: column;
+      }
+      .tasksContainer {
+        display: flex;
+        flex-direction: column;
+      }
+      .taskActions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .filterTasksContainer {
+        display: flex;
+        gap: 10px;
+      }
+      .addTaskContainer {
+        display: flex;
+        gap: 10px;
+      }
+      .tasksCountContainer {
+        display: flex;
+        flex-direction: row;
+      }
+      h4 {
+        margin-right: 10px;
+        padding: 0;
+      }
+      p {
+        margin: 0;
+      }
+      label {
+        padding: 10px 0px 10px 0px;
+      }
+      .error {
+        border: 2px solid red;
+      }
+      .selected {
+        border: 2px solid rgb(8, 213, 8);
+      }
+      .divider {
+        height: 1px;
+        background: #ccc;
+        margin: 10px 0;
+        flex-shrink: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="addTaskContainer">
+        <input type="text" placeholder="Enter task" id="input-task" />
+        <button id="add-task">Add task</button>
+      </div>
+      <label>Filtering Tasks : </label>
+      <div class="filterTasksContainer">
+        <button id="AllTasks">All tasks</button>
+        <button id="completeTasksBtn">Completed Tasks</button>
+        <button id="incompleteTasksBtn">Incomplete Tasks</button>
+      </div>
+
+      <div class="tasksCountContainer">
+        <h4 id="totalTasks">Total Tasks : 0</h4>
+        <h4 id="completedTasksCount">Completed Tasks : 0</h4>
+        <h4 id="incompleteTasksCount">Incomplete Tasks : 0</h4>
+      </div>
+
+      <div class="tasksListContainer"></div>
+    </div>
+
+    <script>
+      const inputTask = document.getElementById("input-task");
+      const addTask = document.getElementById("add-task");
+      const AllTasks = document.getElementById("AllTasks");
+      AllTasks.classList.add("selected");
+      const completedTasks = document.getElementById("completeTasksBtn");
+      const incompleteTasks = document.getElementById("incompleteTasksBtn");
+      const tasksListContainer = document.querySelector(".tasksListContainer");
+      const totalTasks = document.getElementById("totalTasks");
+      const completedTasksCount = document.getElementById(
+        "completedTasksCount"
+      );
+      const incompleteTasksCount = document.getElementById(
+        "incompleteTasksCount"
+      );
+      let totalTasksCount = 0,
+        completeTaskCount = 0,
+        incompleteTaskCount = 0;
+
+      completedTasks.addEventListener("click", () => {
+        const taskContainers = document.querySelectorAll(
+          ".tasksListContainer > div"
+        ); 
+
+        taskContainers.forEach((container) => {
+          const checkBox = container.querySelector('input[type="checkbox"]');
+          if (checkBox && checkBox.checked) {
+            container.style.display = "block";
+          } else {
+            container.style.display = "none";
+          }
+
+          completedTasks.classList.add("selected");
+          incompleteTasks.classList.remove("selected");
+          AllTasks.classList.remove("selected");
+        });
+      });
+
+      incompleteTasks.addEventListener("click", () => {
+        const taskContainers = document.querySelectorAll(
+          ".tasksListContainer > div"
+        );
+
+        taskContainers.forEach((container) => {
+          const checkBox = container.querySelector('input[type="checkbox"]');
+          if (checkBox && checkBox.checked) {
+            container.style.display = "none";
+          } else {
+            container.style.display = "block";
+          }
+          AllTasks.classList.remove("selected");
+          incompleteTasks.classList.add("selected");
+          completedTasks.classList.remove("selected");
+        });
+      });
+
+      AllTasks.addEventListener("click", () => {
+        const taskContainers = document.querySelectorAll(
+          ".tasksListContainer > div"
+        );
+
+        taskContainers.forEach((container) => {
+          container.style.display = "block";
+          completedTasks.classList.remove("selected");
+          AllTasks.classList.add("selected");
+          incompleteTasks.classList.remove("selected");
+        });
+      });
+
+      addTask.addEventListener("click", () => {
+        const value = inputTask.value.trim();
+        if (!value) {
+          inputTask.classList.add("error");
+          alert("Task must not be empty");
+          return;
+        }
+        inputTask.classList.remove("error");
+
+        const taskContainer = document.createElement("div");
+        const taskActions = document.createElement("div");
+        const task = document.createElement("p");
+        const label = document.createElement("label");
+        const checkBox = document.createElement("input");
+        const delet = document.createElement("button");
+        const divider = document.createElement("div");
+
+        taskActions.style.display = "flex";
+        taskActions.style.alignItems = "center";
+        taskActions.style.gap = "10px";
+
+        task.textContent = value;
+        label.textContent = "Mark as completed";
+        checkBox.type = "checkBox";
+        checkBox.checked = false;
+        delet.textContent = "Delete";
+        divider.className = "divider";
+
+        taskActions.appendChild(label);
+        taskActions.appendChild(checkBox);
+        taskActions.appendChild(delet);
+
+        taskContainer.appendChild(task);
+        taskContainer.appendChild(taskActions);
+        taskContainer.appendChild(divider);
+        tasksListContainer.appendChild(taskContainer);
+        totalTasksCount++;
+        incompleteTaskCount++;
+        inputTask.value = "";
+        totalTasks.textContent = `Total Tasks : ${totalTasksCount}`;
+        incompleteTasksCount.textContent = `Incomplete Tasks : ${incompleteTaskCount}`;
+
+        checkBox.addEventListener("click", () => {
+          if (checkBox.checked) {
+            completeTaskCount++;
+            incompleteTaskCount--;
+          } else {
+            completeTaskCount--;
+            incompleteTaskCount++;
+          }
+          completedTasksCount.textContent = `Completed Tasks : ${completeTaskCount}`;
+          incompleteTasksCount.textContent = `Incomplete Tasks : ${incompleteTaskCount}`;
+        });
+
+        delet.addEventListener("click", () => {
+          if (checkBox.checked) {
+            completeTaskCount--;
+          } else {
+            incompleteTaskCount--;
+          }
+          totalTasksCount--;
+
+          tasksListContainer.removeChild(taskContainer);
+
+          totalTasks.textContent = `Total Tasks : ${totalTasksCount}`;
+          completedTasksCount.textContent = `Completed Tasks : ${completeTaskCount}`;
+          incompleteTasksCount.textContent = `Incomplete Tasks : ${incompleteTaskCount}`;
+        });
+      });
+    </script>
+  </body>
+</html>

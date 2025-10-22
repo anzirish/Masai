@@ -1,0 +1,16 @@
+/* Slide across in 50s, reset at 52s */
+@keyframes slideAcross {
+  0% {
+    transform: translateX(0);
+  }
+  96% {
+    transform: translateX(500px); /* stop around 50s */
+  }
+  100% {
+    transform: translateX(0); /* reset at 52s */
+  }
+}
+
+.slide {
+  animation: slideAcross 52s linear infinite;
+}

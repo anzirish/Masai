@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <!-- React & ReactDOM -->
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <!-- Babel for JSX -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <body></body>
+  <div id="root"></div>
+  <script type="text/babel">
+    function App() {
+      return (
+        <div>
+          <Header />
+          <PricingTable />
+        </div>
+      );
+    }
+
+    // Header Component
+    function Header() {
+      return (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: "50px",
+          }}
+        >
+          <h1>
+            The Right Plan for{" "}
+            <span style={{ color: "purple" }}>Your Business</span>
+          </h1>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Numquam
+            quod in iure vero.
+          </p>
+        </div>
+      );
+    }
+
+    // Pricing Table (wraps all plans)
+    function PricingTable() {
+      const plans = [
+        {
+          title: "Starter",
+          price: "Free",
+          features: ["1 lorem ipsum", "Lorem, ipsum dolor.", "Monthly Updates"],
+        },
+        {
+          title: "Lorem Plus",
+          price: "$32.00",
+          features: ["1 lorem ipsum", "Lorem, ipsum dolor.", "Monthly Updates"],
+        },
+        {
+          title: "Lorem Pro",
+          price: "$50.00",
+          features: ["1 lorem ipsum", "Lorem, ipsum dolor.", "Monthly Updates"],
+        },
+      ];
+
+      return (
+        <div>
+          {plans.map((plan, idx) => (
+            <>
+              <hr />
+              <PlanCard
+                key={idx}
+                title={plan.title}
+                price={plan.price}
+                features={plan.features}
+                buttonText="Get Started"
+              />
+            </>
+          ))}
+        </div>
+      );
+    }
+
+    // Reusable PlanCard
+    function PlanCard({ title, price, features, buttonText }) {
+      return (
+        <div
+          className="plan-card"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "50px",
+          }}
+        >
+          <h2>{title}</h2>
+          <div>
+            {features.map((feature, idx) => (
+              <Feature key={idx} text={feature} />
+            ))}
+          </div>
+          <h3>{price}</h3>
+          <button>{buttonText}</button>
+        </div>
+      );
+    }
+
+    // Small Feature component
+    function Feature({ text }) {
+      return <p>✅ {text}</p>;
+    }
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+  </script>
+</html>

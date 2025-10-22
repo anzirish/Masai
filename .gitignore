@@ -1,0 +1,8 @@
+Testing/
+
+# Node modules at any level
+**/node_modules/
+
+# Ignore all environment files at any level
+**/.env
+**/.env.*

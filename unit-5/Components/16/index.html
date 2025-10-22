@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <!-- React & ReactDOM -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <!-- Babel for JSX -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+      .card {
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        padding: 16px;
+        margin: 12px 0;
+        box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.1);
+        max-width: 300px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/babel">
+      const { useState } = React;
+
+      function App() {
+        const [items, addItems] = useState([]);
+        const [formData, setFormData] = useState({
+          name: "",
+          price: "",
+          image: "",
+          discount: "",
+        });
+
+        function validateItem(e) {
+          e.preventDefault();
+          if (
+            !formData.name ||
+            !formData.price ||
+            !formData.image ||
+            !formData.discount
+          ) {
+            alert("Form input is not valid");
+            return;
+          }
+
+          if (!formData.image.includes("http")) {
+            alert("invalid iamge url");
+            return;
+          }
+          // type check for price and discount are required
+          if (parseFloat(formData.price) < 0) {
+            alert("price can't be negative");
+            return;
+          }
+
+          if (
+            parseFloat(formData.discount) < 0 ||
+            parseFloat(formData.discount) > 100
+          ) {
+            alert("invalid discount");
+            return;
+          }
+
+          addItems((prev) => [...prev, formData]);
+          setFormData({ name: "", price: "", image: "", discount: "" });
+          console.log(items); // changes won't reflect immediately as batch upadates abcd
+        }
+
+        function handleChange(e) {
+          const { name, value } = e.target;
+          setFormData((prev) => ({ ...prev, [name]: value }));
+        }
+        return (
+          <div>
+            <form className="form" onSubmit={validateItem}>
+              <input
+                placeholder="Enter name"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+              />
+              <input
+                placeholder="Enter price"
+                name="price"
+                type="number"
+                value={formData.price}
+                onChange={handleChange}
+              />
+              <input
+                placeholder="Enter image"
+                name="image"
+                value={formData.image}
+                onChange={handleChange}
+              />
+              <input
+                placeholder="Enter discount"
+                name="discount"
+                type="number"
+                value={formData.discount}
+                onChange={handleChange}
+              />
+              <button type="submit">Add items</button>
+            </form>
+            {items.map((item, idx) => {
+              return (
+                <ProductCard
+                  id={Date.now()}
+                  name={item.name}
+                  price={item.price}
+                  image={item.image}
+                  discount={item.discount}
+                />
+              );
+            })}
+          </div>
+        );
+      }
+
+      function ProductCard({ name, price, image, discount }) {
+        return (
+          <div className="card">
+            <h2>{name}</h2>
+            <p>{price}</p>
+            <img src={image} style={{ width: "100%", height: "auto" }}></img>
+            <p>{discount}%</p>
+          </div>
+        );
+      }
+
+      const root = ReactDOM.createRoot(document.getElementById("root"));
+      root.render(<App />);
+    </script>
+  </body>
+</html>

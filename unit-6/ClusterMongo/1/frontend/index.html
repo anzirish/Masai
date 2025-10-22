@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <form id="form">
+      <input type="text" placeholder="Enter title" id="title" />
+      <input type="text" placeholder="Enter description" id="desc" />
+      <input type="text" placeholder="Enter priority" id="priority" />
+      <button type="submit">Submit</button>
+    </form>
+  </body>
+  <script>
+    const title = document.getElementById("title");
+    const desc = document.getElementById("desc");
+    const priority = document.getElementById("priority");
+    const form = document.getElementById("form");
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const task = {
+        title: title.value,
+        description: desc.value,
+        priority: priority.value,
+      };
+      fetch("https://masai-3zgg.onrender.com/tasks", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(task),
+      })
+        .then((res) => console.log(res))
+        .catch((e) => console.log(e));
+    });
+  </script>
+</html>

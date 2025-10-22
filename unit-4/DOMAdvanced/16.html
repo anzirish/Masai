@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+    
+      const products = [
+        { id: 1, name: "Product A", price: 50, inStock: true },
+        { id: 2, name: "Product B", price: 30, inStock: false },
+        { id: 3, name: "Product C", price: 70, inStock: true },
+        { id: 4, name: "Product D", price: 20, inStock: false },
+      ];
+
+      const grid = document.createElement("div");
+      grid.style.display = "grid";
+      grid.style.gridTemplateColumns = `repeat(${3}, 1fr)`;
+
+      for (let product of products) {
+        const container = document.createElement("div");
+        const name = document.createElement("h2");
+        const price = document.createElement("h3");
+        name.textContent = product.name;
+        price.textContent = product.price;
+        container.style.padding = '10px'
+        if (product.inStock) {
+          container.style.backgroundColor = "green";
+        } else {
+          container.style.backgroundColor = "red";
+        }
+        container.appendChild(name);
+        container.appendChild(price);
+        grid.appendChild(container);
+      }
+
+      document.body.appendChild(grid);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // create elements
+      let addPara = document.createElement("button");
+      let removeLast = document.createElement("button");
+      let container = document.createElement("div");
+
+      // style elements an dset contents
+      addPara.textContent = "Add paragraph";
+      addPara.style.marginRight = "20px";
+      removeLast.textContent = "Remove last paragraph";
+      document.body.appendChild(addPara);
+      document.body.appendChild(removeLast);
+      document.body.appendChild(container);
+      container.style.display = "flex";
+      container.style.marginTop = "5px";
+      container.style.flexDirection = "column";
+
+      // add paragraph on click
+      addPara.addEventListener("click", () => {
+        const paragraph = document.createElement("p");
+        paragraph.textContent = "This is a new paragraph";
+        paragraph.style.margin = "5px";
+        container.appendChild(paragraph);
+      });
+
+      // remove last paragrapoh
+      removeLast.addEventListener("click", () => {
+        if (container.lastChild) {
+          container.lastChild.remove();
+        } else {
+          alert("there is No paragraph");
+        }
+      });
+    </script>
+  </body>
+</html>

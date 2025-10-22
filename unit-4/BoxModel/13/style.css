@@ -1,0 +1,23 @@
+* {
+  margin: 0;
+}
+
+#header,
+#footer {
+  height: 50px;
+  width: 100%;
+  background-color: aqua;
+  text-align: center;
+  align-content: center;
+}
+
+#header {
+  position: sticky;
+  top: 0;
+}
+
+#footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+}

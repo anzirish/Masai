@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <input type="text" placeholder="Search products" id="search-input" />
+    <label style="margin-left: 50px">Filter:</label>
+    <select id="chooseCategory">
+      <option value="all">All</option>
+      <option value="men's clothing">men's clothing</option>
+      <option value="jewelery">Jewelery</option>
+      <option value="electronics">Electronics</option>
+      <option value="women's clothing">women's clothing</option>
+    </select>
+    <label style="margin-left: 50px">Sort product by price:</label>
+    <button id="ascending">Ascending</button>
+    <button id="descending">Descending</button>
+    <p id="count">Count : 0</p>
+
+    <div
+      style="
+        margin-top: 20px;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2px;
+      "
+      id="grid"
+    ></div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", fetchAPI);
+      const input = document.getElementById("search-input");
+      const selectCategory = document.getElementById("chooseCategory");
+      const ascending = document.getElementById("ascending");
+      const descending = document.getElementById("descending");
+      const countText = document.getElementById("count");
+      input.addEventListener("input", () => filterProducts(input.value));
+      ascending.addEventListener("click", () => filterByAscending());
+      descending.addEventListener("click", () => filterByDescending());
+      selectCategory.addEventListener("change", () =>
+        filterCategory(selectCategory.value)
+      );
+
+      const grid = document.getElementById("grid");
+
+      async function fetchAPI() {
+        try {
+          const response = await fetch("https://fakestoreapi.com/products");
+          if (!response.ok) {
+            console.log("HTTP error ${response.status}");
+            return;
+          }
+          const products = await response.json();
+          localStorage.setItem("products", JSON.stringify(products));
+          console.log(products);
+          showProducts(products);
+        } catch (error) {
+          console.log(error);
+        }
+      }
+
+      function filterByAscending() {
+        const products = JSON.parse(localStorage.getItem("products")) || [];
+
+        const filteredProducts = products.sort(
+          (item1, item2) => item1.price - item2.price
+        );
+        // console.log(query, filteredProducts)
+        showProducts(filteredProducts);
+      }
+      function filterByDescending() {
+        const products = JSON.parse(localStorage.getItem("products")) || [];
+
+        const filteredProducts = products.sort(
+          (item1, item2) => item2.price - item1.price
+        );
+        // console.log(query, filteredProducts)
+        showProducts(filteredProducts);
+      }
+
+      function filterCategory(category) {
+        const products = JSON.parse(localStorage.getItem("products")) || [];
+
+        if (category == "all") {
+          showProducts(products);
+          return;
+        }
+
+        const filteredProducts = products.filter(
+          (item) => item.category.toLowerCase() == category.toLowerCase()
+        );
+        showProducts(filteredProducts);
+      }
+
+      function filterProducts(query) {
+        const products = JSON.parse(localStorage.getItem("products")) || [];
+
+        const filteredProducts = products.filter((item) =>
+          item.title.toLowerCase().includes(query.toLowerCase())
+        );
+        // console.log(query, filteredProducts)
+        showProducts(filteredProducts);
+      }
+
+      function showProducts(products) {
+        grid.innerHTML = "";
+        let productCount = 0;
+        // console.log(products, grid);
+        products.forEach((product) => {
+          const container = create("div");
+          const image = create("img");
+          const title = create("h4");
+          const price = create("h3");
+          const rate = create("h3");
+          const count = create("h3");
+          const desc = create("p");
+
+          applyStyles(container, {
+            display: "flex",
+            gap: "5px",
+            "flex-direction": "column", // Below one wil do the same
+            flexDirection: "column", // Above one will do hte same
+            border: "2px solid black",
+          });
+
+          applyStyles(image, {
+            width: "100px",
+            height: "100px",
+          });
+
+          image.style.margin = "0px";
+          title.style.margin = "0px";
+          rate.style.margin = "0px";
+          count.style.margin = "0px";
+          desc.style.margin = "0px";
+
+          image.src = product.image;
+          title.textContent = product.title;
+          price.textContent = product.price;
+          rate.textContent = product.rating.rate;
+          count.textContent = product.rating.count;
+          desc.textContent = product.description;
+          productCount++;
+
+          container.append(image, title, price, rate, count, desc);
+          grid.appendChild(container);
+        });
+        countText.textContent = `Count : ${productCount}`;
+      }
+
+      function applyStyles(element, styles) {
+        Object.assign(element.style, styles);
+      }
+
+      function create(type) {
+        return document.createElement(type);
+      }
+
+      function setContent(element, content) {
+        element.textContent = content;
+      }
+    </script>
+  </body>
+</html>

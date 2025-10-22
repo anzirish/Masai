@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="script.js"></script>
+</head>
+<body>
+    <h1 id="heading">Helloooo</h1>
+    <p>Okay</p>
+    <p>Nokay</p>
+    <p>Sokay</p>
+    <p>Kokay</p>
+    <div class="container">Hellow i'm div</div>
+</body>
+</html>
+
+<script>
+    document.getElementById("heading").textContent = "Welcome to the DOM World!"
+
+    let paras = document.getElementsByTagName("p")
+    for(let i = 0;i<paras.length;i++){
+        paras[i].style.color = 'blue'
+    }
+    
+    document.querySelector(".container").style.backgroundColor = 'blue'
+</script>

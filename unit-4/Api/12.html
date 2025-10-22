@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <form id="form">
+      <input type="text" placeholder="Enter title" id="title" />
+      <input type="text" placeholder="Enter body" id="body" />
+      <button id="submit">Submit</button>
+      <div id="container"></div>
+    </form>
+    <script>
+      document.getElementById("form").addEventListener("submit", (e) => {
+        e.preventDefault(); // prevent form  reloading the form
+        postData();
+      });
+      async function postData() {
+        const title = document.getElementById("title");
+        const body = document.getElementById("body");
+        const container = document.getElementById("container");
+
+        if (!title.value.trim() || !body.value.trim()) {
+          alert("title or body is empty");
+          return;
+        }
+
+        try {
+          const reponse = await fetch(
+            "https://jsonplaceholder.typicode.com/posts/",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                title: title.value.trim(),
+                body: body.value.trim(),
+                userId: 1,
+              }),
+            }
+          );
+          const data = await reponse.json();
+
+          const titleText = document.createElement("h4");
+          const bodyText = document.createElement("p");
+          titleText.textContent = `Title : ${data.title}`;
+          bodyText.textContent = `Body : ${data.body}`;
+          container.append(titleText, bodyText);
+          document.getElementById("form").reset();
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,122 @@
+body {
+  background-color: black;
+  padding: 20px;
+  margin: 0;
+}
+
+#container,
+#images,
+#albums {
+  border: 2px solid rgb(78, 77, 77);
+  background-color: black;
+  border-radius: 10px;
+}
+
+#container {
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+}
+
+#images {
+  flex: 3;
+  padding: 10px;
+}
+
+#albums {
+  flex: 2;
+  gap: 20px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (max-width: 1024px) {
+  #container {
+    display: flex;
+    gap: 10px;
+    padding: 10px;
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 600px) {
+  .grid-container {
+    display: grid;
+    row-gap: 30px;
+    margin-bottom: 20px;
+    justify-content: space-around;
+    padding: 10px;
+    grid-template-columns: repeat(1, 1fr);
+    width: auto;
+  }
+
+  .grid-container2 {
+    display: grid;
+    row-gap: 30px;
+    margin-bottom: 20px;
+    justify-content: space-around;
+    padding: 10px;
+    grid-template-columns: repeat(1, 1fr);
+    width: auto;
+  }
+
+  .grid-container img, .grid-container2 img {
+    height: auto;
+    border-radius: 50%;
+    width: 100%;
+  }
+}
+
+.grid-container {
+  display: grid;
+  row-gap: 30px;
+  margin-bottom: 20px;
+  justify-content: space-around;
+  padding: 10px;
+  grid-template-columns: repeat(3, auto);
+  width: auto;
+}
+
+.grid-container2 {
+  display: grid;
+  row-gap: 30px;
+  margin-bottom: 20px;
+  justify-content: space-around;
+  padding: 10px;
+  grid-template-columns: repeat(3, 200px);
+  width: auto;
+}
+
+.grid-container img, .grid-container2 img {
+  height: 150px;
+  border-radius: 50%;
+  width: 150px;
+}
+
+.grid-container,
+.album-items {
+  border: 2px solid rgb(78, 77, 77);
+  background-color: black;
+  border-radius: 10px;
+}
+
+.album-items {
+  height: 150px;
+}
+
+.album-items:nth-child(1) {
+  background-color: #ff1744; /* Vibrant Red */
+}
+.album-items:nth-child(5) {
+  background-color: #ffea00; /* Vibrant Yellow */
+}
+.album-items:nth-child(3) {
+  background-color: #00e676; /* Vibrant Green */
+}
+.album-items:nth-child(4) {
+  background-color: #2979ff; /* Vibrant Blue */
+}
+.album-items:nth-child(2) {
+  background-color: #d500f9; /* Vibrant Purple */
+}

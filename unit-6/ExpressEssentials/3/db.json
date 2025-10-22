@@ -1,0 +1,22 @@
+[
+  {
+    "id": 175929638061022,
+    "title": "The Great succes",
+    "author": "F. Scott Fitzgerald",
+    "genre": "Fiction",
+    "publishedYear": 1925,
+    "status": "available",
+    "borrowedBy": null,
+    "borrowedDate": null
+  },
+  {
+    "id": 17592963806102,
+    "title": "The Great succes",
+    "author": "F. Scott Fitzgerald",
+    "genre": "Fiction",
+    "publishedYear": 1925,
+    "status": "borrowed",
+    "borrowedBy": "John Doe",
+    "borrowedDate": "2025-10-01T06:02:34.512Z"
+  }
+]

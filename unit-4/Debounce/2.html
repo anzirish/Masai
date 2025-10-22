@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+        p{
+            border: 2px solid aqua;
+        }
+    </style>
+  </head>
+  <body>
+    <input id="search" placeholder="Search movie by title" />
+    <div id="results"></div>
+    <script>
+      const search = document.getElementById("search");
+      const container = document.getElementById("results");
+      const BASE_URL = `https://www.omdbapi.com/?apikey=addcfff6&s=`;
+      
+      function debounce(func, delay) {
+        let timeoutId;
+        return function (...args) {
+          clearTimeout(timeoutId);
+          timeoutId = setTimeout(() => func.apply(this, args), delay);
+        };
+      }
+      
+      const debouncedSearch = debounce((value) => searchmovie(value), 500);
+      
+      search.addEventListener("input", (e) => debouncedSearch(e.target.value));
+
+      async function searchmovie(title) {
+        const response = await fetch(`${BASE_URL}${title}`);
+        if (!response.ok) {
+          return;
+        }
+        const data = await response.json();
+        if (data.Response == "True") {
+          display(data.Search);
+        } else {
+          console.log("Enter more inputs");
+        }
+      }
+
+      function display(movies) {
+        container.innerHTML = "";
+        movies.forEach((movie) => {
+          const p = document.createElement("p");
+          p.textContent = movie.Title;
+          container.appendChild(p);
+        });
+      }
+    </script>
+  </body>
+</html>

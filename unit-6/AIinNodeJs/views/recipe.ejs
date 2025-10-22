@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title><%= recipe.recipeTitle %></title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 30px; line-height: 1.6; }
+    h1 { color: #2c3e50; }
+    h2 { color: #16a085; margin-top: 20px; }
+    ul { list-style-type: disc; padding-left: 20px; }
+    ol { padding-left: 20px; }
+    .nutrition { background: #f1f1f1; padding: 10px; border-radius: 5px; width: fit-content; }
+    .button { margin-top: 20px; padding: 10px 15px; background: #16a085; color: white; text-decoration: none; border-radius: 5px; }
+  </style>
+</head>
+<body>
+  <h1><%= recipe.recipeTitle %></h1>
+
+  <h2>Ingredients</h2>
+  <ul>
+    <% recipe.ingredients.forEach(i => { %>
+      <li><%= i.item %> — <%= i.quantity %></li>
+    <% }) %>
+  </ul>
+
+  <h2>Steps</h2>
+  <ol>
+    <% recipe.steps.forEach(s => { %>
+      <li><%= s %></li>
+    <% }) %>
+  </ol>
+
+  <h2>Nutrition (per serving)</h2>
+  <div class="nutrition">
+    Calories: <%= recipe.nutrition.calories %> kcal |
+    Protein: <%= recipe.nutrition.protein %> |
+    Fat: <%= recipe.nutrition.fat %> |
+    Carbs: <%= recipe.nutrition.carbs %>
+  </div>
+
+  <a class="button" href="/recipe-pdf/<%= recipe.recipeTitle %>?recipe=<%= encodeURIComponent(JSON.stringify(recipe)) %>">Download PDF</a>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <!-- React & ReactDOM -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <!-- Babel for JSX -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- Axios for API -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  </head>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    .spinner {
+      border: 6px solid #f3f3f3;
+      border-top: 6px solid #3498db;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      animation: spin 1s linear infinite;
+      margin: 20px auto;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    .app {
+      min-height: 100vh;
+      transition: background 0.3s, color 0.3s;
+      color: black;
+    }
+
+    .app.dark {
+      background: #201313;
+      color: white;
+    }
+
+    button {
+      background: transparent; /* remove default grey */
+      border: 1px solid currentColor; /* border matches text color */
+      color: inherit; /* text matches parent color */
+      padding: 8px 12px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-right: 10px;
+      transition: all 0.3s;
+    }
+
+    button:hover {
+      opacity: 0.7;
+    }
+  </style>
+  <body>
+    <div id="root"></div>
+    <script type="text/babel" src="app.js"></script>
+  </body>
+</html>

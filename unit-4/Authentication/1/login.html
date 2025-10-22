@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth-compat.js"></script>
+  </head>
+  <style>
+    #form-group {
+      width: 30%;
+      margin: auto;
+    }
+    input,
+    button {
+      width: 100%;
+      padding: 10px;
+      box-sizing: border-box;
+      border-radius: 5px;
+      margin-bottom: 20px;
+    }
+  </style>
+  <body>
+    <div id="form-group">
+      <input
+        type="text"
+        placeholder="Enter email"
+        id="email-input-login"
+        required
+      />
+      <input
+        type="text"
+        placeholder="Enter password"
+        id="input-password-login"
+        required
+      />
+      <button id="login" type="submit" onclick="login()">Login</button>
+    </div>
+    <script>
+      if (!localStorage.getItem("uid")) {
+        window.location.href = "register.html";
+      } else{
+        window.location.href = 'dashboard.html'
+      }
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyCsXidgP5gl32q7Ax07t7uv7l8Y21dGgDI",
+        authDomain: "ddddd-c2529.firebaseapp.com",
+        projectId: "ddddd-c2529",
+        storageBucket: "ddddd-c2529.firebasestorage.app",
+        messagingSenderId: "941333365341",
+        appId: "1:941333365341:web:a559bd4eea6409528e03b4",
+        databaseURL:
+          "https://ddddd-c2529-default-rtdb.asia-southeast1.firebasedatabase.app",
+      };
+
+      firebase.initializeApp(firebaseConfig);
+      const auth = firebase.auth();
+
+      const passwordInputLogin = document.getElementById(
+        "input-password-login"
+      );
+      const emailInputLogin = document.getElementById("email-input-login");
+
+      function login() {
+        const email = emailInputLogin.value;
+        const password = passwordInputLogin.value;
+
+        auth
+          .signInWithEmailAndPassword(email, password)
+          .then((userCredential) => {
+            emailInputLogin.value = "";
+            passwordInputLogin.value = "";
+            localStorage.setItem("uid", userCredential.user.uid);
+            window.location.href = "dashboard.html";
+          })
+          .catch((error) => alert(error.message));
+      }
+    </script>
+  </body>
+</html>

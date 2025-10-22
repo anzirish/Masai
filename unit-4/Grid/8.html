@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      #container {
+        width: 20%;
+        margin: auto;
+      }
+
+      .card {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 5px;
+        padding: 20px;
+        border: 2px solid rgb(244, 244, 244);
+      }
+
+      input {
+        border: 2px solid rgb(244, 244, 244);
+        height: 40px;
+        border-radius: 5px;
+      }
+
+      button{
+        border: 2px solid rgb(244, 244, 244);
+        outline: none;
+        background-color: white;
+        border-radius: 5px;
+        padding: 10px;
+        box-shadow: 2px 2px 2px rgb(244, 244, 244);
+      }
+
+      button:hover{
+        background-color: aqua;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container">
+      <h2 style="color: #377e7f; text-align: center;">Masai Calculator</h2>
+      <div class="card">
+        <input style="grid-column: span 4" type="text" />
+        <button>1</button>
+        <button>2</button>
+        <button>3</button>
+        <button style="background-color: black; color: white">+</button>
+        <button>4</button>
+        <button>5</button>
+        <button>6</button>
+        <button style="background-color: black; color: white">-</button>
+        <button>7</button>
+        <button>8</button>
+        <button>9</button>
+        <button style="background-color: black; color: white">x</button>
+        <button style="background-color: #ea3323; color: white">C</button>
+        <button>0</button>
+        <button style="background-color: black; color: white">=</button>
+        <button style="background-color: black; color: white">/</button>
+      </div>
+    </div>
+  </body>
+</html>
