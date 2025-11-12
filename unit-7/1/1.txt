@@ -1,0 +1,13 @@
+//steps
+
+1. Initiliaze a node js project [npm init -y]
+
+2. Install typescript local or global [npm i typescript]
+
+3. Write typescript code
+
+4. Initiliaze tsconfiguration [tsc --init] and define rootDir and outDir
+
+5. Transpile typescript files [tsc]
+
+6. Run the equivalent entry file from the transpiled direcoty
